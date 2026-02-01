@@ -1,0 +1,138 @@
+# Excel VBA Macro - Color-Based Column Population
+## Complete Solution for Transaction Status & Secure Flag
+
+---
+
+## INSTALLATION INSTRUCTIONS
+
+### Step 1: Open VBA Editor
+1. Open your Excel file
+2. Press **Alt + F11** to open the VBA Editor
+3. In the left panel, find your sheet name and right-click it
+4. Select **"Insert" â†’ "Module"**
+
+### Step 2: Copy & Paste Code
+Copy ALL the code below into the new Module and save
+
+---
+
+## COMPLETE VBA CODE
+
+```vba
+Option Explicit
+
+' ============================================================================
+' MODULE: Color Detection & Column Population
+' PURPOSE: Detect yellow fill and black/red font colors in Column W
+'          Auto-populate Transaction Status and Secure Flag columns
+' ============================================================================
+
+' Track the last used column for adding new data
+Dim lastColumn As Long
+
+Sub InitializeColumns()
+    '
+    ' Initialize and setup the new columns
+    ' Call this ONCE when you first set up the macro
+    '
+    
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim lastCol As Long
+    Dim newColTransaction As Long
+    Dim newColSecure As Long
+    
+    Set ws = ActiveSheet
+    
+    ' Find last used row
+    lastRow = ws.Cells(ws.Rows.Count, "W").End(xlUp).Row
+    
+    ' Find last column with data
+    lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    
+    ' New columns will be after last used column
+    newColTransaction = lastCol + 1
+    newColSecure = lastCol + 2
+    
+    ' Add headers
+    ws.Cells(1, newColTransaction).Value = "Transaction Status"
+    ws.Cells(1, newColTransaction).Font.Bold = True
+    
+    ws.Cells(1, newColSecure).Value = "Secure Flag"
+    ws.Cells(1, newColSecure).Font.Bold = True
+    
+    ' Format headers
+    ws.Cells(1, newColTransaction).Interior.Color = RGB(200, 200, 200)
+    ws.Cells(1, newColSecure).Interior.Color = RGB(200, 200, 200)
+    
+    ' Call main population routine
+    PopulateAllRows
+    
+    MsgBox "Columns initialized! Transaction Status and Secure Flag columns added." & vbCrLf & _
+           "New columns: " & ws.Cells(1, newColTransaction).Address & " and " & ws.Cells(1, newColSecure).Address, vbInformation
+
+End Sub
+
+Sub PopulateAllRows()
+    '
+    ' Populate all rows with Transaction Status and Secure Flag
+    ' Based on Column W colors
+    '
+    
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim lastCol As Long
+    Dim i As Long
+    Dim newColTransaction As Long
+    Dim newColSecure As Long
+    Dim transactionStatus As String
+    Dim secureFlag As String
+    
+    Set ws = ActiveSheet
+    
+    ' Find last row in column W
+    lastRow = ws.Cells(ws.Rows.Count, "W").End(xlUp).Row
+    
+    ' Find last column (where we'll add our new columns)
+    lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    
+    newColTransaction = lastCol + 1
+    newColSecure = lastCol + 2
+    
+    ' Loop through all data rows (skip header in row 1)
+    For i = 2 To lastRow
+        ' Get color-based values for this row
+        GetColorBasedValues ws.Range("W" & i), transactionStatus, secureFlag
+        
+        ' Populate the new columns
+        ws.Cells(i, newColTransaction).Value = transactionStatus
+        ws.Cells(i, newColSecure).Value = secureFlag
+        
+    Next i
+    
+    MsgBox "All rows populated successfully!", vbInformation
+
+End Sub
+
+Sub GetColorBasedValues(colorCell As Range, ByRef transactionStatus As String, ByRef secureFlag As String)
+    '
+    ' Determine Transaction Status and Secure Flag based on cell colors
+    '
+    ' LOGIC:
+    ' - Yellow Fill â†’ Transaction Status = "Rejected"
+    ' - Black Font â†’ Transaction Status = "Accepted"
+    ' - Black Font â†’ Secure Flag = "Yes"
+    ' - Red Font â†’ Secure Flag = "No"
+    '
+    
+    Dim cellFillColor As Long
+    Dim cellFontColor As Long
+    Dim isYellow As Boolean
+    Dim isBlackFont As Boolean
+    Dim isRedFont As Boolean
+    
+    ' Get cell fill color (Interior)
+    cellFillColor = colorCell.Interior.Color
+    
+    ' Get cell font color
+    cellFontColor = colorCell.Font.Color
