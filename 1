@@ -1,0 +1,86 @@
+Option Explicit
+
+' Detect yellow fill and black/red font colors in Column W
+' Auto-populate Transaction Status and Secure Flag columns
+
+Sub InitializeColumns()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim lastCol As Long
+    Dim newColTransaction As Long
+    Dim newColSecure As Long
+
+    Set ws = ActiveSheet
+
+    ' Find last used row in W
+    lastRow = ws.Cells(ws.Rows.Count, "W").End(xlUp).Row
+
+    ' Find last column with data
+    lastCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+
+    ' New columns will be after last used column
+    newColTransaction = lastCol + 1
+    newColSecure = lastCol + 2
+
+    ' Add headers
+    ws.Cells(1, newColTransaction).Value = "Transaction Status"
+    ws.Cells(1, newColTransaction).Font.Bold = True
+
+    ws.Cells(1, newColSecure).Value = "Secure Flag"
+    ws.Cells(1, newColSecure).Font.Bold = True
+
+    ' Fill all rows once
+    PopulateAllRows newColTransaction, newColSecure
+End Sub
+
+Sub PopulateAllRows(newColTransaction As Long, newColSecure As Long)
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim transactionStatus As String
+    Dim secureFlag As String
+
+    Set ws = ActiveSheet
+
+    lastRow = ws.Cells(ws.Rows.Count, "W").End(xlUp).Row
+
+    For i = 2 To lastRow
+        GetColorBasedValues ws.Range("W" & i), transactionStatus, secureFlag
+        ws.Cells(i, newColTransaction).Value = transactionStatus
+        ws.Cells(i, newColSecure).Value = secureFlag
+    Next i
+End Sub
+
+Sub GetColorBasedValues(colorCell As Range, _
+                        ByRef transactionStatus As String, _
+                        ByRef secureFlag As String)
+
+    Dim cellFillColor As Long
+    Dim cellFontColor As Long
+    Dim isYellow As Boolean
+    Dim isBlackFont As Boolean
+    Dim isRedFont As Boolean
+
+    cellFillColor = colorCell.Interior.Color
+    cellFontColor = colorCell.Font.Color
+
+    isYellow = (cellFillColor = RGB(255, 255, 0)) Or (cellFillColor = 65535)
+    isBlackFont = (cellFontColor = RGB(0, 0, 0)) Or (cellFontColor = 0) Or (cellFontColor = -16777216)
+    isRedFont = (cellFontColor = RGB(255, 0, 0)) Or (cellFontColor = 255)
+
+    If isYellow Then
+        transactionStatus = "Rejected"
+    ElseIf isBlackFont Then
+        transactionStatus = "Accepted"
+    Else
+        transactionStatus = ""
+    End If
+
+    If isBlackFont Then
+        secureFlag = "Yes"
+    ElseIf isRedFont Then
+        secureFlag = "No"
+    Else
+        secureFlag = ""
+    End If
+End Sub
