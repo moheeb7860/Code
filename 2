@@ -1,0 +1,25 @@
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim lastCol As Long
+    Dim newColTransaction As Long
+    Dim newColSecure As Long
+    Dim transactionStatus As String
+    Dim secureFlag As String
+    Dim r As Long
+
+    If Intersect(Target, Me.Columns("W")) Is Nothing Then Exit Sub
+
+    Application.EnableEvents = False
+    On Error GoTo ExitHere
+
+    lastCol = Me.Cells(1, Me.Columns.Count).End(xlToLeft).Column
+    newColTransaction = lastCol + 1
+    newColSecure = lastCol + 2
+
+    r = Target.Row
+    GetColorBasedValues Me.Range("W" & r), transactionStatus, secureFlag
+    Me.Cells(r, newColTransaction).Value = transactionStatus
+    Me.Cells(r, newColSecure).Value = secureFlag
+
+ExitHere:
+    Application.EnableEvents = True
+End Sub
