@@ -1,0 +1,154 @@
+' Check if fill is Yellow (RGB: 255, 255, 0)
+    ' Yellow color value in RGB: 65535 (or close to it)
+    isYellow = (cellFillColor = RGB(255, 255, 0)) Or (cellFillColor = 65535)
+    
+    ' Check if font is Black (RGB: 0, 0, 0)
+    ' Black color value: 0 or -16777216
+    isBlackFont = (cellFontColor = RGB(0, 0, 0)) Or (cellFontColor = 0) Or (cellFontColor = -16777216)
+    
+    ' Check if font is Red (RGB: 255, 0, 0)
+    ' Red color value: 255
+    isRedFont = (cellFontColor = RGB(255, 0, 0)) Or (cellFontColor = 255)
+    
+    ' Determine Transaction Status
+    If isYellow Then
+        transactionStatus = "Rejected"
+    ElseIf isBlackFont Then
+        transactionStatus = "Accepted"
+    Else
+        transactionStatus = ""  ' Empty if no matching color
+    End If
+    
+    ' Determine Secure Flag
+    If isBlackFont Then
+        secureFlag = "Yes"
+    ElseIf isRedFont Then
+        secureFlag = "No"
+    Else
+        secureFlag = ""  ' Empty if no matching color
+    End If
+
+End Sub
+
+' ============================================================================
+' AUTO-UPDATE FUNCTIONALITY
+' ============================================================================
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+    '
+    ' This event runs automatically when ANY cell is changed
+    ' It updates the Transaction Status and Secure Flag if Column W changes
+    '
+    ' RIGHT-CLICK on your Sheet Tab â†’ "View Code"
+    ' PASTE THIS ENTIRE CODE into the Sheet module (not regular module)
+    '
+    
+    Dim lastCol As Long
+    Dim newColTransaction As Long
+    Dim newColSecure As Long
+    Dim changedRow As Long
+    Dim transactionStatus As String
+    Dim secureFlag As String
+    
+    ' Only process if change is in Column W
+    If Intersect(Target, Me.Columns("W")) Is Nothing Then Exit Sub
+    
+    ' Prevent macro from triggering itself
+    Application.EnableEvents = False
+    
+    On Error GoTo ErrorHandler
+    
+    changedRow = Target.Row
+    
+    ' Find the new columns (added after existing data)
+    lastCol = Me.Cells(1, Me.Columns.Count).End(xlToLeft).Column
+    newColTransaction = lastCol + 1
+    newColSecure = lastCol + 2
+    
+    ' Get color-based values for changed row
+    GetColorBasedValues Me.Range("W" & changedRow), transactionStatus, secureFlag
+    
+    ' Update the columns
+    Me.Cells(changedRow, newColTransaction).Value = transactionStatus
+    Me.Cells(changedRow, newColSecure).Value = secureFlag
+    
+ErrorHandler:
+    Application.EnableEvents = True
+    
+End Sub
+
+' ============================================================================
+' HELPER FUNCTION: Get Color Values
+' ============================================================================
+
+Function GetCellFillColorRGB(colorCell As Range) As String
+    '
+    ' Returns RGB values of cell fill color for debugging
+    ' Use this if colors don't detect correctly
+    '
+    Dim color As Long
+    Dim R As Long, G As Long, B As Long
+    
+    color = colorCell.Interior.Color
+    R = color Mod 256
+    G = (color \ 256) Mod 256
+    B = (color \ 65536) Mod 256
+    
+    GetCellFillColorRGB = "RGB(" & R & ", " & G & ", " & B & ") = " & color
+
+End Function
+
+Function GetCellFontColorRGB(colorCell As Range) As String
+    '
+    ' Returns RGB values of cell font color for debugging
+    ' Use this if colors don't detect correctly
+    '
+    Dim color As Long
+    Dim R As Long, G As Long, B As Long
+    
+    color = colorCell.Font.Color
+    R = color Mod 256
+    G = (color \ 256) Mod 256
+    B = (color \ 65536) Mod 256
+    
+    GetCellFontColorRGB = "RGB(" & R & ", " & G & ", " & B & ") = " & color
+
+End Function
+
+' ============================================================================
+' DEBUGGING: Check Color Detection
+' ============================================================================
+
+Sub CheckColorInCell()
+    '
+    ' Run this to check if colors in your selected cell are detected correctly
+    ' Select a colored cell and run this macro (Alt + F8)
+    '
+    
+    Dim selectedCell As Range
+    Set selectedCell = Selection
+    
+    MsgBox "Selected Cell: " & selectedCell.Address & vbCrLf & _
+           "Fill Color: " & GetCellFillColorRGB(selectedCell) & vbCrLf & _
+           "Font Color: " & GetCellFontColorRGB(selectedCell), vbInformation
+
+End Sub
+
+```
+
+---
+
+## HOW TO USE
+
+### First Time Setup:
+
+1. **Open VBA Editor**: Alt + F11
+2. **Insert Module**: Right-click sheet tab â†’ "Insert" â†’ "Module"
+3. **Paste the code** from the "COMPLETE VBA CODE" section above
+4. **Right-click your sheet tab** â†’ "View Code"
+5. **Paste the Worksheet_Change event** code at the bottom
+6. **Save the file** (Ctrl + S)
+7. **Run InitializeColumns**: 
+   - Press Alt + F8
+   - Select "InitializeColumns"
+   - Click "Run"
