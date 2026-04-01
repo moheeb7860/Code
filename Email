@@ -1,0 +1,33 @@
+Please find below a simplified view of the EFM fraud case creation process for transactions not alerted by the system:
+1. Scope
+Applies to fraud transactions not alerted by EFM
+Includes both accepted and rejected transactions (based on conditions below)
+2. Fraud Types
+11 – Card Takeover
+3 – Account Takeover
+5 – Push Payment
+3. Decision Logic
+All transactions rejected → No marking, No case
+All transactions unsecured → No marking, No case
+Mixed scenario (at least one secured transaction) →
+Mark all fraud transactions in EFM
+Create case
+4. Case Details (if created)
+Mandator: Fraud Compliance
+Case Class: Fraud CC
+Case Score: 0
+Comments: SAMA Case Serial Number
+5. Summary
+Scenario
+Marking
+Case Creation
+All Rejected
+No
+No
+All Unsecured
+No
+No
+Mixed (Secured + Others)
+Yes
+Yes
+This ensures controlled case creation and avoids unnecessary case volume while maintaining compliance.
