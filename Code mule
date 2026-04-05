@@ -1,0 +1,28 @@
+WITH firstrestriction AS (
+    SELECT 
+        e.sabbaccountnumber, 
+        MIN(e.dateandtimestampofinitiation) AS first_rest_time 
+    FROM dp_vow_sem_risk_fraud.efm e
+    WHERE e.transaction_type = 'N3.2'
+      AND e.afterchange <> 1
+      AND e.sabbaccountnumber = 'SASABB352703763001'
+    GROUP BY 1
+),
+RankedLogins AS (
+    SELECT 
+        ee.*, 
+        fr.first_rest_time,
+        ROW_NUMBER() OVER (
+            PARTITION BY ee.sabbaccountnumber 
+            ORDER BY ee.dateandtimestampofinitiation DESC
+        ) as login_rank
+    FROM dp_vow_sem_risk_fraud.efm ee
+    INNER JOIN firstrestriction fr 
+        ON ee.sabbaccountnumber = fr.sabbaccountnumber
+    WHERE ee.transaction_type = 'N1.1'
+      AND ee.dateandtimestampofinitiation < fr.first_rest_time
+      AND ee.sabbaccountnumber = 'SASABB352703763001'
+)
+SELECT * FROM RankedLogins 
+WHERE login_rank = 1;
+
