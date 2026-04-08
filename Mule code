@@ -1,0 +1,18 @@
+SELECT ee.*
+FROM dp_vew_sem_risk_fraud.v_sama_login_extd_details_fraud ee
+WHERE ee.clients_national_residency_commercial_id = 2512667243
+  AND (CAST(ee.login_date AS TIMESTAMP) + CAST(ee.login_time AS INTERVAL)) = (
+      -- Subquery to find the single specific timestamp
+      SELECT MAX(CAST(inner_l.login_date AS TIMESTAMP) + CAST(inner_l.login_time AS INTERVAL))
+      FROM dp_vew_sem_risk_fraud.v_sama_login_extd_details_fraud inner_l
+      CROSS JOIN (
+          -- Find the restriction time once
+          SELECT MIN(e.dateandtimestampofinitiation) AS res_time
+          FROM dp_vew_sem_risk_fraud.efm e
+          WHERE e.sabbaccountnumber = 'SASABB352703763001'
+            AND e.transaction_type = 'N3.2'
+            AND e.afterchange <> 1
+      ) res
+      WHERE inner_l.clients_national_residency_commercial_id = 2512667243
+        AND (CAST(inner_l.login_date AS TIMESTAMP) + CAST(inner_l.login_time AS INTERVAL)) < res.res_time
+  );
