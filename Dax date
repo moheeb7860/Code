@@ -1,0 +1,12 @@
+DateTable =
+ADDCOLUMNS(
+    CALENDAR(MIN('Table'[Reporting Date]), MAX('Table'[Reporting Date])),
+    "Year", YEAR([Date]),
+    "Month Number", MONTH([Date]),
+    "Month Name", FORMAT([Date], "MMM"),
+    "Year-Month", FORMAT([Date], "YYYY-MM"),
+    "Week Number", WEEKNUM([Date]),
+    "Year-Week", YEAR([Date]) & "-" & WEEKNUM([Date]),
+    "Day", DAY([Date]),
+    "Day Name", FORMAT([Date], "DDD")
+)
