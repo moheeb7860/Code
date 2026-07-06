@@ -1,1 +1,53 @@
 
+import pandas as pd
+import glob
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+# Define the columns we actually want to keep (this handles the "extra columns" problem)
+EXPECTED_COLUMNS = ["transaction_id", "customer_id", "amount", "timestamp", "status"]
+
+
+def extract(folder_path):
+    """Read all Excel files in a folder into a list of DataFrames."""
+    files = glob.glob(f"{folder_path}/*.xlsx")
+    logging.info(f"Found {len(files)} files to process")
+
+    raw_dfs = []
+    for f in files:
+        df = pd.read_excel(f)
+        raw_dfs.append(df)
+    return raw_dfs
+
+
+def transform(raw_dfs):
+    """Clean each DataFrame: drop extra columns, handle nulls, then combine."""
+    cleaned_dfs = []
+
+    for df in raw_dfs:
+        # Keep only expected columns (drops any extra trailing columns automatically)
+        df = df[[col for col in EXPECTED_COLUMNS if col in df.columns]]
+
+        # Handle nulls: drop rows missing critical fields, fill others
+        df = df.dropna(subset=["transaction_id", "amount"])
+        df["status"] = df["status"].fillna("UNKNOWN")
+
+        cleaned_dfs.append(df)
+
+    # Combine all files into a single DataFrame
+    combined_df = pd.concat(cleaned_dfs, ignore_index=True)
+    logging.info(f"Combined into {len(combined_df)} total rows")
+    return combined_df
+
+
+def load(df, output_path):
+    """Write the final DataFrame to a single Excel file."""
+    df.to_excel(output_path, index=False)
+    logging.info(f"Saved final file to {output_path}")
+
+
+if __name__ == "__main__":
+    raw = extract("input_folder")
+    clean = transform(raw)
+    load(clean, "output_folder/combined_fraud_transactions.xlsx")
