@@ -1,16 +1,71 @@
-Fraud Loss Statement = 
-VAR CurrMonth = MAX('Date'[Month Name])
-VAR CurrAmt = [Fraud Loss]
-VAR PrevMonth = 
-    CALCULATE(
-        MAX('Date'[Month Name]),
-        DATEADD('Date'[Date], -1, MONTH)
+let
+    StartDate = #date(2026, 1, 1),
+    EndDate = #date(2026, 12, 31),
+
+    DateList = List.Dates(
+        StartDate,
+        Duration.Days(EndDate - StartDate) + 1,
+        #duration(1,0,0,0)
+    ),
+
+    DateTable = Table.FromList(
+        DateList,
+        Splitter.SplitByNothing(),
+        {"Date"}
+    ),
+
+    ChangedType = Table.TransformColumnTypes(
+        DateTable,
+        {{"Date", type date}}
+    ),
+
+    AddYear = Table.AddColumn(
+        ChangedType,
+        "Year",
+        each Date.Year([Date]),
+        Int64.Type
+    ),
+
+    AddMonthNumber = Table.AddColumn(
+        AddYear,
+        "Month Number",
+        each Date.Month([Date]),
+        Int64.Type
+    ),
+
+    AddMonth = Table.AddColumn(
+        AddMonthNumber,
+        "Month",
+        each Date.ToText([Date], "MMMM"),
+        type text
+    ),
+
+    AddMonthYear = Table.AddColumn(
+        AddMonth,
+        "Month Year",
+        each Date.ToText([Date], "MMM yyyy"),
+        type text
+    ),
+
+    AddQuarter = Table.AddColumn(
+        AddMonthYear,
+        "Quarter",
+        each "Q" & Text.From(Date.QuarterOfYear([Date])),
+        type text
+    ),
+
+    AddWeek = Table.AddColumn(
+        AddQuarter,
+        "Week Number",
+        each Date.WeekOfYear([Date]),
+        Int64.Type
+    ),
+
+    AddDay = Table.AddColumn(
+        AddWeek,
+        "Day",
+        each Date.Day([Date]),
+        Int64.Type
     )
-VAR PrevAmt = [Fraud Loss PM]
-VAR ChangePct = [Fraud Loss MoM %]
-VAR Direction = IF(ChangePct < 0, "Decrease", "Increase")
-RETURN
-"Fraud losses for the period of " & CurrMonth & ": SAR " & 
-FORMAT(CurrAmt, "#,##0") & " compared to the previous month " & 
-PrevMonth & ": SAR " & FORMAT(PrevAmt, "#,##0") & " | " & 
-Direction & " of " & FORMAT(ABS(ChangePct), "0.0%")
+in
+    AddDay
