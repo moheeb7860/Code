@@ -1,13 +1,16 @@
-Date = 
-ADDCOLUMNS(
-    CALENDAR(DATE(2020,1,1), DATE(2027,12,31)),
-    "Year", YEAR([Date]),
-    "Month Number", MONTH([Date]),
-    "Month Name", FORMAT([Date], "MMMM"),
-    "Month Short", FORMAT([Date], "MMM"),
-    "Year Month", FORMAT([Date], "MMM YYYY"),
-    "Quarter", "Q" & FORMAT([Date], "Q"),
-    "Day", DAY([Date]),
-    "Weekday", FORMAT([Date], "dddd"),
-    "MonthYearSort", YEAR([Date]) * 100 + MONTH([Date])
-)
+Fraud Loss Statement = 
+VAR CurrMonth = MAX('Date'[Month Name])
+VAR CurrAmt = [Fraud Loss]
+VAR PrevMonth = 
+    CALCULATE(
+        MAX('Date'[Month Name]),
+        DATEADD('Date'[Date], -1, MONTH)
+    )
+VAR PrevAmt = [Fraud Loss PM]
+VAR ChangePct = [Fraud Loss MoM %]
+VAR Direction = IF(ChangePct < 0, "Decrease", "Increase")
+RETURN
+"Fraud losses for the period of " & CurrMonth & ": SAR " & 
+FORMAT(CurrAmt, "#,##0") & " compared to the previous month " & 
+PrevMonth & ": SAR " & FORMAT(PrevAmt, "#,##0") & " | " & 
+Direction & " of " & FORMAT(ABS(ChangePct), "0.0%")
