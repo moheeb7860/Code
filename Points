@@ -1,41 +1,43 @@
-Here's the expanded draft with deeper sub-points under each area — still grounded in the tasks you listed, just fleshed out with practical detail.
+Fair — let me tone it down and keep it plain, like the original list, just with a bit more detail added in.
 
-**Slide 1 — Title**
-Fraud & Mule Risk Operations — Team Update | [Your name/team] | [Date]
+1. **Master Data Fraud** – Maintain the fraud cases database in Excel, updating it daily, including manual fields like EFM alerts.
 
-**Slide 2 — Agenda**
-What We Do → Key Achievements → Areas We're Improving → Ongoing Initiatives
+2. **Daily Report** – Prepare and share the daily cases and transaction updates, highlighting key incidents and a summary.
 
-**Slide 3 — What We Do (Scope of Work)**
-- **Fraud case handling (EFM):** Flagging fraud transactions daily, blacklisting counterparties and device IDs linked to confirmed fraud
-- **Mule link analysis:** Investigating daily incoming cases to identify mule account networks and cashout patterns
-- **Dashboards & automation:** Power BI and Excel dashboards for fraud/mule case tracking; Denodo/SQL queries built to auto-extract data instead of manual pulls
-- **Reporting cadence:** KRI/KPI reports (daily, weekly, monthly, quarterly), Daily/Weekly case summaries, Monthly fraud loss reports
-- **Case governance:** CRM request handling; ensuring every case is logged and tracked in EFM
-- **Master data management:** Maintaining fraud case DB and zero-loss case DB in Excel
-- **Compliance reporting:** SAMA data validation and SAMA mule reporting (KPI decks + dashboards)
-- **Stakeholder support:** CRO weekly meeting inputs, ad-hoc requests from other internal teams
+3. **Daily EFM Report** – Analyze and prepare daily EFM-triggered alerts and other fraud-related metrics.
 
-**Slide 4 — Key Achievements**
-- **Automation of manual work:** Built Denodo/SQL queries to pull fraud and mule case data directly — replacing manual searching and reduces time spent compiling reports
-- **Unified visibility:** Created Power BI and Excel dashboards giving a single, consolidated view of fraud and mule case activity for the team and stakeholders
-- **Reporting maturity:** Established a structured KRI/KPI reporting rhythm — daily, weekly, monthly, and quarterly — giving management consistent visibility into fraud trends
-- **100% case traceability:** All cases reconciled and tracked within the EFM case management system, closing gaps in case visibility
-- **Regulatory delivery:** Delivered SAMA mule account KPI reports and dashboards on schedule, supporting compliance requirements
-- **Specialized outputs:** Produced Sim Swap PPT reporting and supported CRO weekly reviews with relevant fraud/mule insights
-- **Cross-team support:** Responded to ad-hoc data/analysis requests from other teams without disrupting core reporting deliverables
+4. **CRO Report and Weekly Report** – Consolidate the week's activities and cases, and highlight key observations.
 
-**Slide 5 — Areas We're Improving**
-- **Manual effort in reporting:** Even with automation, some report compilation (daily/weekly summaries, KPI decks) still requires manual consolidation — working to extend SQL/Denodo automation further
-- **Reporting load vs. case work:** Balancing time between live fraud/mule case investigation and the recurring reporting cycle (daily through quarterly) is a constant capacity challenge
-- **SAMA data validation:** Ensuring accuracy of data before SAMA submission requires careful manual validation — looking to build validation checks into the query layer
-- **Ad-hoc request volume:** Requests from other teams can be unpredictable, so building a lightweight intake process would help protect time for core fraud/mule priorities
-- **Master data upkeep:** Fraud case DB and zero-loss DB are maintained manually in Excel — a candidate for future database/automation migration
+5. **Sim Swap Report** – Track sim swap cases weekly along with the analysis.
 
-**Slide 6 — Ongoing Initiatives / Next Steps**
-- Expand Denodo/SQL automation to remove remaining manual steps in daily and periodic reporting
-- Enhance Power BI dashboards with more real-time / self-serve views for stakeholders
-- Reinforce CRM/case-tracking discipline so all cases hit EFM consistently and on time
-- Explore migrating manual Excel master data (fraud cases, zero-loss cases) into a more structured/automated data store
+6. **Bi-Weekly Fraud Report** – Do a two-week analysis of fraud cases and transactions, comparing trends with the previous period.
 
-Let me know if this level of detail works, or if any slide needs more/less — then I'll build the .pptx.
+7. **Monthly Fraud Report** – Prepare a comprehensive monthly fraud performance and analysis report.
+
+8. **Monthly Management Report** – Consolidate the month's activities and cases, and highlight key observations.
+
+9. **Fraud Case Handling (EFM)** – Flag fraud transactions daily, and blacklist counterparties and device IDs linked to confirmed fraud.
+
+10. **Mule Link Analysis** – Investigate daily incoming cases to identify mule account networks, based on emails, device IDs, and cashout patterns.
+
+11. **Dashboards** – Build and maintain Power BI and Excel dashboards for fraud/mule case tracking, and write Denodo/SQL queries to auto-extract the data.
+
+12. **WPI KPI Report (Weekly)** – Prepare and share the weekly mule and fraud-based data report for KPI metrics, along with evidence.
+
+13. **WPI KPI Report (Monthly)** – Prepare and share the monthly mule and fraud-based data report, comparing current and previous month, for KPI metrics, along with evidence.
+
+14. **Phone Number Analysis** – Analyze fraudster numbers present in the bank weekly, and update AFC communication team if any suspicious activity is found.
+
+15. **CRM Case Closure** – Close CRM cases and ensure all cases are present in the Case Management System.
+
+16. **Zero Loss Case Handling** – Work on zero loss cases received from the MIS fraud monitoring team, investigate, and take respective action.
+
+17. **Master Data for Zero Losses** – Track and maintain all zero loss transactions reported and generated by the system daily.
+
+18. **Ad Hoc Tasks** – Handle multiple ad hoc tasks daily from different teams, requiring manual work.
+
+19. **SAMA Mule Report Extraction** – Extract account statements for mule reports sent to SAMA from Tableau, which is a manual and time-taking process.
+
+20. **SQL Query Writing** – Write SQL queries in Denodo, joining multiple tables to get the required data.
+
+Want this in a Word doc?
