@@ -1,0 +1,1 @@
+=IF(ISNUMBER(SEARCH("P4 Detective",A2)),"P4",IF(ISNUMBER(SEARCH("P5 Preventive",A2)),"P5",""))
