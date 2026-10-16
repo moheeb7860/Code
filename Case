@@ -1,0 +1,37 @@
+-- Accepted transaction %
+ROUND(
+    100.0 * COUNT(CASE
+        WHEN EF.transactionstatusincorebanking IN ('A', 'AP', '1')
+        THEN 1
+    END) / NULLIF(COUNT(*), 0),
+    2
+) AS accepted_txn_pct,
+
+-- Rejected transaction %
+ROUND(
+    100.0 * COUNT(CASE
+        WHEN EF.transactionstatusincorebanking IN ('R', 'RJ', '0')
+        THEN 1
+    END) / NULLIF(COUNT(*), 0),
+    2
+) AS rejected_txn_pct,
+
+-- Fraud amount %
+ROUND(
+    100.0 * SUM(CASE
+        WHEN EF.sp_fraudflag >= 2
+        THEN EF.localcurrencytransactionamount
+        ELSE 0
+    END) / NULLIF(SUM(EF.localcurrencytransactionamount), 0),
+    3
+) AS fraud_amount_pct,
+
+-- Mule amount %
+ROUND(
+    100.0 * SUM(CASE
+        WHEN EF.sp_fraudflag = 4
+        THEN EF.localcurrencytransactionamount
+        ELSE 0
+    END) / NULLIF(SUM(EF.localcurrencytransactionamount), 0),
+    3
+) AS mule_amount_pct
