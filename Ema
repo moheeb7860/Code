@@ -1,0 +1,2 @@
+The calculation methodology for KPI 1 – Mule (Internally Detected Cases) has been revised.
+Previously, internal detection was calculated based on the Mule Discovery Mechanism. Under the revised methodology, the account scoring model is considered, and accounts with either high or low scoring outcomes are classified as internally detected, as per the revised criteria.
