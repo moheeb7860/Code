@@ -1,0 +1,17 @@
+Dear Team,
+
+Previously, we used the MIS Monitor queue to identify FraudCC cases with a case closure code of Zero Losses and cases classified as Confirmed Fraud – SE ECOM. However, this queue is currently unavailable in MIS.
+
+As an alternative, we are manually identifying the cases using the following criteria:
+
+- Mandators: AML
+- Case Class: FraudCC
+- Case Close Code: Zero Losses
+- Fraud Classification: Confirmed Fraud – SE ECOM
+
+Kindly confirm whether we can proceed with using the above criteria to populate the MIS EFM Monitor database and generate the EFM report.
+
+Your confirmation will help ensure the accuracy and consistency of the reporting process.
+
+Best regards,
+[Your Name]
