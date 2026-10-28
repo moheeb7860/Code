@@ -1,0 +1,21 @@
+SELECT
+    customer_id,
+    CASE
+        WHEN MAX(
+            CASE
+                WHEN sp_intercept IN (1, 2) THEN 1
+                ELSE 0
+            END
+        ) = 1
+        AND SUM(
+            CASE
+                WHEN credit_debt_ind = 0 THEN 1
+                ELSE 0
+            END
+        ) = 0
+        THEN 'YES'
+        ELSE 'NO'
+    END AS condition_satisfied
+FROM your_table
+WHERE customer_id IN ('C001', 'C002', 'C003')
+GROUP BY customer_id;
