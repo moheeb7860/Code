@@ -1,1 +1,2 @@
 =IFERROR(IF(Query!B2=INDEX(Manual!B$2:B$301;MATCH($A2;Manual!$A$2:$A$301;0));"OK";"DIFF");"ID missing")
+=IFERROR(TEXTJOIN(" | ";TRUE;IF(Query!B2:Z2<>INDEX(Manual!$B$2:$Z$301;MATCH($A2;Manual!$A$2:$A$301;0);0);Query!$B$1:$Z$1&": Manual="&INDEX(Manual!$B$2:$Z$301;MATCH($A2;Manual!$A$2:$A$301;0);0)&", Query="&Query!B2:Z2;""));"ID missing")
