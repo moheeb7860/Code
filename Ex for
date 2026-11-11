@@ -1,3 +1,6 @@
 =IFERROR(IF(Query!B2=INDEX(Manual!B$2:B$301;MATCH($A2;Manual!$A$2:$A$301;0));"OK";"DIFF");"ID missing")
 =IFERROR(TEXTJOIN(" | ";TRUE;IF(Query!B2:Z2<>INDEX(Manual!$B$2:$Z$301;MATCH($A2;Manual!$A$2:$A$301;0);0);Query!$B$1:$Z$1&": Manual="&INDEX(Manual!$B$2:$Z$301;MATCH($A2;Manual!$A$2:$A$301;0);0)&", Query="&Query!B2:Z2;""));"ID missing")
 =LET(q;Query!B2:Z301;m;XLOOKUP(Query!A2:A301;Manual!A2:A301;Manual!B2:Z301;"ID missing");d;q<>m;HSTACK(TOCOL(IF(d;Query!A2:A301;NA());3);TOCOL(IF(d;Query!B1:Z1;NA());3);TOCOL(IF(d;m;NA());3);TOCOL(IF(d;q;NA());3)))
+
+=IFERROR(INDEX('Manual data'!$A$2:$Z$301,MATCH($A2,'Manual data'!$A$2:$A$301,0),MATCH($B2,'Manual data'!$A$1:$Z$1,0)),"ID missing")
+=IFERROR(INDEX('Query data'!$A$2:$Z$301,MATCH($A2,'Query data'!$A$2:$A$301,0),MATCH($B2,'Query data'!$A$1:$Z$1,0)),"ID missing")
