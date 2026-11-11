@@ -1,1 +1,1 @@
-=IFERROR(B2<>INDEX(Manual!B$2:B$301,MATCH($A2,Manual!$A$2:$A$301,0)),TRUE)
+=IFERROR(IF(Query!B2=INDEX(Manual!B$2:B$301;MATCH($A2;Manual!$A$2:$A$301;0));"OK";"DIFF");"ID missing")
